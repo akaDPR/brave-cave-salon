@@ -279,10 +279,30 @@ nav.scrolled {
 .gallery-stage {
   position: relative;
   width: 100%;
-  height: 70vw;
-  max-height: 560px;
-  min-height: 300px;
+  height: 75vw;
+  max-height: 620px;
+  min-height: 340px;
   overflow: hidden;
+}
+/* Bleed the bottom into page — no hard box edge */
+.gallery-stage::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 35%;
+  background: linear-gradient(to bottom, transparent 0%, var(--ink) 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+/* Soften sides too */
+.gallery-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right,  var(--ink) 0%, transparent 8%, transparent 92%, var(--ink) 100%);
+  z-index: 4;
+  pointer-events: none;
 }
 
 /* Each slide */
@@ -290,7 +310,7 @@ nav.scrolled {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.4s cubic-bezier(.4,0,.2,1);
+  transition: opacity 0.65s ease-in-out;
   will-change: opacity;
 }
 .g-slide.active { opacity: 1; }
@@ -316,7 +336,7 @@ nav.scrolled {
 /* Service label — bottom left of each slide */
 .g-label {
   position: absolute; bottom: 0; left: 0; right: 0;
-  z-index: 2;
+  z-index: 5;
   padding: 2rem var(--px) 1.8rem;
   display: flex; align-items: flex-end; justify-content: space-between;
 }
@@ -359,12 +379,12 @@ nav.scrolled {
   height: 1px; background: var(--gold);
   width: 0%;
   transition: width linear;
-  z-index: 3;
+  z-index: 6;
 }
 
 /* Prev / Next arrows — subtle, appear on hover on desktop */
 .g-arrow {
-  position: absolute; top: 50%; z-index: 3;
+  position: absolute; top: 50%; z-index: 6;
   transform: translateY(-50%);
   width: 48px; height: 48px;
   border: 1px solid rgba(201,168,112,.3);
@@ -1114,7 +1134,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu();
 (function() {
   const slides     = document.querySelectorAll('.g-slide');
   const progress   = document.getElementById('gProgress');
-  const DURATION   = 5000; // ms per slide
+  const DURATION   = 3000; // ms per slide
   const TRANSITION = 1400; // ms fade duration
 
   let current   = 0;
